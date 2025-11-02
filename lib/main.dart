@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         title: 'Chat App',
         theme: ThemeData.dark(),
 
-        initialRoute: "/login",
+        initialRoute: "/signup",
 
         routes: {
           "/login": (_) => const LoginPage(),

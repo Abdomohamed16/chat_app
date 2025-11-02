@@ -20,7 +20,9 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+
+            backgroundColor: Colors.black,
+
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -85,7 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 const SizedBox(height: 25),
 
-                // Sign Up Button
+                // Sign Up Button + Google Sign Up
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
                     if (state is AuthSuccess) {
@@ -98,24 +100,49 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                   },
                   builder: (context, state) {
-                    return ElevatedButton(
-                      onPressed: state is AuthLoading
-                          ? null
-                          : () {
-                              context.read<AuthCubit>().signUp(
-                                    emailController.text.trim(),
-                                    passwordController.text.trim(),
-                                  );
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                      child: state is AuthLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-
-                          : const Text("Sign Up", style: TextStyle(fontSize: 18)),
+                    final isLoading = state is AuthLoading;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ElevatedButton(
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  context.read<AuthCubit>().signUp(
+                                        emailController.text.trim(),
+                                        passwordController.text.trim(),
+                                      );
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            minimumSize: const Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          child: isLoading
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : const Text("Sign Up", style: TextStyle(fontSize: 18)),
+                        ),
+                        const SizedBox(height: 12),
+                        ElevatedButton.icon(
+                          onPressed: isLoading
+                              ? null  
+                              : () {
+                                  // Trigger Google sign-in/signup in the cubit.
+                                  // Adjust method name if your cubit uses a different one.
+                                  context.read<AuthCubit>().signInWithGoogle();
+                                },
+                          icon: const Icon(Icons.g_translate, color: Colors.black),
+                          label: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12.0),
+                            child: Text("Sign up with Google", style: TextStyle(color: Colors.black)),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            minimumSize: const Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),
@@ -123,7 +150,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 20),
 
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
                   child: const Text("Already have an account? Login",
                       style: TextStyle(color: Colors.white70)),
                 )
