@@ -18,7 +18,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key});  
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         title: 'Chat App',
         theme: ThemeData.dark(),
 
-        initialRoute: "/signup",
+        initialRoute: "/home",
 
         routes: {
           "/login": (_) => const LoginPage(),
